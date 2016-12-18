@@ -19,7 +19,7 @@ IMG := $(CAFFE_ROOT)/examples/images/cat.jpg
 
 classification.o: $(SOURCE)
 	@ echo $(OBJS)
-	$(CXX) $< -c -o $@ $(INCLUDEFLAGS) $(COMMON_FLAGS)
+	$(CXX) $< -c -g -o $@ $(INCLUDEFLAGS) $(COMMON_FLAGS)
 
 fix.o:src/test_fix.cpp
 	$(CXX) $< -c -o $@ $(INCLUDEFLAGS) --std=gnu++11
@@ -29,10 +29,12 @@ fix.bin:fix.o
 all: $(TARGET)
 
 classify :
-	./$(TARGET) $(MODEL) $(WEIGHTS) $(MEAN) $(SYNSET) $(IMG)
+	@ echo $(MODEL) $(WEIGHTS) $(MEAN) $(SYNSET) $(IMG)
+	@ ./$(TARGET) $(MODEL) $(WEIGHTS) $(MEAN) $(SYNSET) $(IMG)
+
 $(TARGET): $(OBJS)
 	@ echo LD $@
-	@ $(LD) -o $@ $(OBJS) $(LD_FLAGS)
+	@ $(LD) -g -o $@ $(OBJS) $(LD_FLAGS)
 
 $(BUILD_DIR)/%.o: %.cpp
 	@ mkdir -p build
@@ -43,7 +45,7 @@ $(BUILD_DIR)/%.o: %.cpp
 	@ mkdir -p build/src/caffe/util
 	@ mkdir -p build/src/caffe/solvers
 	@ echo CXX $<
-	@ $(CXX) $< -c -o $@ $(INCLUDEFLAGS) $(COMMON_FLAGS)
+	@ $(CXX) $< -c -g -o $@ $(INCLUDEFLAGS) $(COMMON_FLAGS)
 
 clean:
 	@ rm -rf build
