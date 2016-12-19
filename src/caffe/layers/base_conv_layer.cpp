@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <vector>
 
-//#include "caffe/filler.hpp"
+#include "caffe/filler.hpp"
 #include "caffe/layers/base_conv_layer.hpp"
 #include "caffe/util/im2col.hpp"
 #include "caffe/util/math_functions.hpp"
@@ -164,8 +164,8 @@ void BaseConvolutionLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
     }
     // Initialize and fill the weights:
     // output channels x input channels per-group x kernel height x kernel width
-    
-  /*  this->blobs_[0].reset(new Blob<Dtype>(weight_shape));
+
+    this->blobs_[0].reset(new Blob<Dtype>(weight_shape));
     shared_ptr<Filler<Dtype> > weight_filler(GetFiller<Dtype>(
         this->layer_param_.convolution_param().weight_filler()));
     weight_filler->Fill(this->blobs_[0].get());
@@ -175,7 +175,7 @@ void BaseConvolutionLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
       shared_ptr<Filler<Dtype> > bias_filler(GetFiller<Dtype>(
           this->layer_param_.convolution_param().bias_filler()));
       bias_filler->Fill(this->blobs_[1].get());
-    }*/
+    }
   }
   kernel_dim_ = this->blobs_[0]->count(1);
   weight_offset_ = conv_out_channels_ * kernel_dim_ / group_;

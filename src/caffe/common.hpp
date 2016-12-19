@@ -114,7 +114,25 @@ class Caffe {
   // implementation from one another (for cross-platform compatibility).
 
   // Getters for boost rng, curand, and cublas handles
+  class RNG {
+   public:
+    RNG();
+    explicit RNG(unsigned int seed);
+    explicit RNG(const RNG&);
+    RNG& operator=(const RNG&);
+    void* generator();
+   private:
+    class Generator;
+    shared_ptr<Generator> generator_;
+  };
 
+  // Getters for boost rng, curand, and cublas handles
+  inline static RNG& rng_stream() {
+    if (!Get().random_generator_) {
+      Get().random_generator_.reset(new RNG());
+    }
+    return *(Get().random_generator_);
+  }
 
   // Returns the mode: running on CPU or GPU.
   inline static Brew mode() { return Get().mode_; }
@@ -125,7 +143,7 @@ class Caffe {
   // it personally but better to note it here in the header file.
   inline static void set_mode(Brew mode) { Get().mode_ = mode; }
   // Sets the random seed of both boost and curand
-  //static void set_random_seed(const unsigned int seed);
+  static void set_random_seed(const unsigned int seed);
   // Sets the device. Since we have cublas and curand stuff, set device also
   // requires us to reset those values.
   static void SetDevice(const int device_id);
@@ -143,7 +161,7 @@ class Caffe {
   inline static void set_root_solver(bool val) { Get().root_solver_ = val; }
 
  protected:
-
+shared_ptr<RNG> random_generator_;
   Brew mode_;
   int solver_count_;
   bool root_solver_;

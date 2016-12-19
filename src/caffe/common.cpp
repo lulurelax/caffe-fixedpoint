@@ -5,7 +5,7 @@
 #include <ctime>
 
 #include "caffe/common.hpp"
-//#include "caffe/util/rng.hpp"
+#include "caffe/util/rng.hpp"
 
 namespace caffe {
 
@@ -51,11 +51,15 @@ void GlobalInit(int* pargc, char*** pargv) {
 
 
 Caffe::Caffe()
-    :mode_(Caffe::CPU),solver_count_(1), root_solver_(true) { }
+    : random_generator_(), mode_(Caffe::CPU),
+      solver_count_(1), root_solver_(true) { }
 
 Caffe::~Caffe() { }
 
-
+void Caffe::set_random_seed(const unsigned int seed) {
+  // RNG seed
+  Get().random_generator_.reset(new RNG(seed));
+}
 void Caffe::SetDevice(const int device_id) {
   NO_GPU;
 }
@@ -73,5 +77,25 @@ int Caffe::FindDevice(const int start_id) {
   NO_GPU;
   return -1;
 }
+class Caffe::RNG::Generator {
+ public:
+  Generator() : rng_(new caffe::rng_t(cluster_seedgen())) {}
+  explicit Generator(unsigned int seed) : rng_(new caffe::rng_t(seed)) {}
+  caffe::rng_t* rng() { return rng_.get(); }
+ private:
+  shared_ptr<caffe::rng_t> rng_;
+};
 
+Caffe::RNG::RNG() : generator_(new Generator()) { }
+
+Caffe::RNG::RNG(unsigned int seed) : generator_(new Generator(seed)) { }
+
+Caffe::RNG& Caffe::RNG::operator=(const RNG& other) {
+  generator_ = other.generator_;
+  return *this;
+}
+
+void* Caffe::RNG::generator() {
+  return static_cast<void*>(generator_->rng());
+}
 }  // namespace caffe

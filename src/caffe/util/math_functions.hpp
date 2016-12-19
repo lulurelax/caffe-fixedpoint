@@ -68,7 +68,7 @@ void caffe_div(const int N, const Dtype* a, const Dtype* b, Dtype* y);
 
 template <typename Dtype>
 void caffe_powx(const int n, const Dtype* a, const Dtype b, Dtype* y);
-/*
+
 unsigned int caffe_rng_rand();
 
 template <typename Dtype>
@@ -86,7 +86,7 @@ void caffe_rng_bernoulli(const int n, const Dtype p, int* r);
 
 template <typename Dtype>
 void caffe_rng_bernoulli(const int n, const Dtype p, unsigned int* r);
-*/
+
 template <typename Dtype>
 void caffe_exp(const int n, const Dtype* a, Dtype* y);
 
