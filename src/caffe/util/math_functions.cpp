@@ -2,7 +2,7 @@
 #include <boost/random.hpp>
 
 #include <limits>
-
+#include <iostream>
 #include "caffe/common.hpp"
 #include "caffe/util/math_functions.hpp"
 #include "caffe/util/rng.hpp"
@@ -16,6 +16,8 @@ void caffe_cpu_gemm<float>(const CBLAS_TRANSPOSE TransA,
     float* C) {
   int lda = (TransA == CblasNoTrans) ? K : M;
   int ldb = (TransB == CblasNoTrans) ? N : K;
+  //LOG(INFO)<<"time flies.";
+  std::cout<<"row: "<<M<<" col: "<<N<<" vec: "<<K<<std::endl;
   cblas_sgemm(CblasRowMajor, TransA, TransB, M, N, K, alpha, A, lda, B,
       ldb, beta, C, N);
 }
@@ -27,6 +29,7 @@ void caffe_cpu_gemm<double>(const CBLAS_TRANSPOSE TransA,
     double* C) {
   int lda = (TransA == CblasNoTrans) ? K : M;
   int ldb = (TransB == CblasNoTrans) ? N : K;
+  std::cout<<"row: "<<M<<" col: "<<N<<" vec: "<<K<<std::endl;
   cblas_dgemm(CblasRowMajor, TransA, TransB, M, N, K, alpha, A, lda, B,
       ldb, beta, C, N);
 }
