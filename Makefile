@@ -1,4 +1,4 @@
-INCLUDEFLAGS :=-I./src -I/usr/local/include -I/usr/include/hdf5/serial
+INCLUDEFLAGS :=-I./inlcude -I/usr/local/include -I/usr/include/hdf5/serial
 COMMON_FLAGS := -DCPU_ONLY --std=gnu++11
 CXX :=g++
 LD :=g++

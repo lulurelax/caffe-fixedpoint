@@ -1,12 +1,12 @@
 #include <boost/math/special_functions/next.hpp>
 #include <boost/random.hpp>
-
+//#include "sg14/fixed_point"
 #include <limits>
 #include <iostream>
 #include "caffe/common.hpp"
 #include "caffe/util/math_functions.hpp"
 #include "caffe/util/rng.hpp"
-
+//typedef sg14::fixed_point<int32_t,
 namespace caffe {
 
 template<>
@@ -59,7 +59,10 @@ void caffe_axpy<double>(const int N, const double alpha, const double* X,
 template <typename Dtype>
 void caffe_set(const int N, const Dtype alpha, Dtype* Y) {
   if (alpha == 0) {
-    memset(Y, 0, sizeof(Dtype) * N);  // NOLINT(caffe/alt_fn)
+    //memset(Y, 0, sizeof(Dtype) * N);  // NOLINT(caffe/alt_fn)
+    for(int i = 0; i < N; ++i){
+      Y[i]=0;
+    }
     return;
   }
   for (int i = 0; i < N; ++i) {
@@ -71,12 +74,13 @@ template void caffe_set<int>(const int N, const int alpha, int* Y);
 template void caffe_set<float>(const int N, const float alpha, float* Y);
 template void caffe_set<double>(const int N, const double alpha, double* Y);
 
-template <>
-void caffe_add_scalar(const int N, const float alpha, float* Y) {
+template <typename Dtype>
+void caffe_add_scalar(const int N, const Dtype alpha, Dtype* Y) {
   for (int i = 0; i < N; ++i) {
     Y[i] += alpha;
   }
 }
+template void caffe_add_scalar<myfp>(const int N, const myfp alpha, myfp* Y);
 
 template <>
 void caffe_add_scalar(const int N, const double alpha, double* Y) {
@@ -109,6 +113,8 @@ template void caffe_copy<unsigned int>(const int N, const unsigned int* X,
     unsigned int* Y);
 template void caffe_copy<float>(const int N, const float* X, float* Y);
 template void caffe_copy<double>(const int N, const double* X, double* Y);
+template void caffe_copy<myfp>(const int N, const myfp* X, myfp* Y);
+
 
 template <>
 void caffe_scal<float>(const int N, const float alpha, float *X) {

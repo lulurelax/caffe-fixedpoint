@@ -4,7 +4,7 @@
 #include <boost/shared_ptr.hpp>
 #include <gflags/gflags.h>
 #include <glog/logging.h>
-
+#include <sg14/fixed_point>
 #include <climits>
 #include <cmath>
 #include <fstream>  // NOLINT(readability/streams)
@@ -15,7 +15,7 @@
 #include <string>
 #include <utility>  // pair
 #include <vector>
-
+typedef sg14::fixed_point<int32_t, -20> myfp;
 //#include "caffe/util/device_alternate.hpp"
 #define NO_GPU LOG(FATAL) << "Cannot use GPU in CPU-only Caffe: check mode."
 // Convert macro to string
