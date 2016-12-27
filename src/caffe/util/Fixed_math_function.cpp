@@ -270,13 +270,16 @@ namespace fixed_point{
        #define F77_incX incX
        #define F77_incY incY
     #endif
-       F77_saxpy( &F77_N, &alpha, X, &F77_incX, Y, &F77_incY);
+    for(int i=0;i<N;i++){
+      Y[i]=Y[i]+alpha*X[i];
+    }
+      // F77_saxpy( &F77_N, &alpha, X, &F77_incX, Y, &F77_incY);
   }
-  void F77_saxpy(const int *N, const myfp *alpha, const myfp *X,
-                      const int *incX, myfp *Y, const int *incY){
-     cblas_saxpy(*N, *alpha, X, *incX, Y, *incY);
-     return;
-  }
+  // void F77_saxpy(const int *N, const myfp *alpha, const myfp *X,
+  //                     const int *incX, myfp *Y, const int *incY){
+  //    cblas_saxpy(*N, *alpha, X, *incX, Y, *incY);
+  //    return;
+  // }
   myfp cblas_sdot( const int N, const myfp *X,
     const int incX, const myfp *Y, const int incY){
        myfp dot=0;
@@ -306,7 +309,7 @@ namespace fixed_point{
      F77_sasum_sub( &F77_N, X, &F77_incX, &asum);
      return asum;
   }
-  
+
   void cblas_scopy( const int N, const myfp *X,
                         const int incX, myfp *Y, const int incY)
   {
