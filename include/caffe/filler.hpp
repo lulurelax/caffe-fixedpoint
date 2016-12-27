@@ -152,7 +152,7 @@ class XavierFiller : public Filler<Dtype> {
     Dtype n = fan_in;  // default to fan_in
     if (this->filler_param_.variance_norm() ==
         FillerParameter_VarianceNorm_AVERAGE) {
-      n = (fan_in + fan_out) / Dtype(2);
+      n = Dtype(fan_in + fan_out) / Dtype(2);
     } else if (this->filler_param_.variance_norm() ==
         FillerParameter_VarianceNorm_FAN_OUT) {
       n = fan_out;
@@ -194,7 +194,7 @@ class MSRAFiller : public Filler<Dtype> {
     Dtype n = fan_in;  // default to fan_in
     if (this->filler_param_.variance_norm() ==
         FillerParameter_VarianceNorm_AVERAGE) {
-      n = (fan_in + fan_out) / Dtype(2);
+      n = Dtype(fan_in + fan_out) / Dtype(2);
     } else if (this->filler_param_.variance_norm() ==
         FillerParameter_VarianceNorm_FAN_OUT) {
       n = fan_out;

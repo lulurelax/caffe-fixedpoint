@@ -14,7 +14,9 @@ void TanHLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
   Dtype* top_data = top[0]->mutable_cpu_data();
   const int count = bottom[0]->count();
   for (int i = 0; i < count; ++i) {
-    top_data[i] = tanh(bottom_data[i]);
+    //lewis_modify_sign
+    // top_data[i] = tanh(bottom_data[i]);
+    top_data[i] = tanh(float(bottom_data[i]));
   }
 }
 

@@ -1,4 +1,4 @@
-INCLUDEFLAGS :=-I./inlcude -I/usr/local/include -I/usr/include/hdf5/serial
+INCLUDEFLAGS :=-I./include -I/usr/local/include -I/usr/include/hdf5/serial
 COMMON_FLAGS := -DCPU_ONLY --std=gnu++11
 CXX :=g++
 LD :=g++
@@ -45,7 +45,7 @@ $(BUILD_DIR)/%.o: %.cpp
 	@ mkdir -p build/src/caffe/util
 	@ mkdir -p build/src/caffe/solvers
 	@ echo CXX $<
-	@ $(CXX) $< -c -g -o $@ $(INCLUDEFLAGS) $(COMMON_FLAGS)
+	@ $(CXX) $< -c -g -o $@ $(INCLUDEFLAGS) $(COMMON_FLAGS) -DUSE_FIX
 
 clean:
 	@ rm -rf build

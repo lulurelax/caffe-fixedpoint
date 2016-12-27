@@ -15,8 +15,11 @@ void DropoutLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
   DCHECK(threshold_ > 0.);
   DCHECK(threshold_ < 1.);
   scale_ = 1. / (1. - threshold_);
-  uint_thres_ = static_cast<unsigned int>(UINT_MAX * threshold_);
+  //lewis_modify_sign
+  // uint_thres_ = static_cast<unsigned int>(UINT_MAX * threshold_);
+  uint_thres_ = static_cast<unsigned int>(float(UINT_MAX * threshold_));
 }
+
 
 template <typename Dtype>
 void DropoutLayer<Dtype>::Reshape(const vector<Blob<Dtype>*>& bottom,

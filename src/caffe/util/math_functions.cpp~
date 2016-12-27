@@ -83,9 +83,9 @@ void caffe_cpu_gemv<myfp>(const CBLAS_TRANSPOSE TransA, const int M,
     const myfp beta, myfp* y) {
       int xlen,ylen;
       float falpha=float(alpha),fbeta=float(beta);
-      if(TransA == CblasTrans){xlen=M;ylen=N; }
-      else if ( TransA == CblasConjTrans ){xlen=N;ylen=M;}
-      else if ( TransA == CblasNoTrans ){xlen=N;ylen=M;}
+      if(TransA == CblasTrans){xlen=N;ylen=M; }
+      else if ( TransA == CblasConjTrans ){xlen=M;ylen=N;}
+      else if ( TransA == CblasNoTrans ){xlen=M;ylen=N;}
       else
       {
         // cblas_xerbla(2, "cblas_sgemm",

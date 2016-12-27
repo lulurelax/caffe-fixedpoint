@@ -29,7 +29,10 @@ void LRNLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
     square_bottom_vec_.push_back(&square_input_);
     square_top_vec_.push_back(&square_output_);
     LayerParameter square_param;
-    square_param.mutable_power_param()->set_power(Dtype(2));
+    //lewis_modify_sign
+    // square_param.mutable_power_param()->set_power(Dtype(2));
+    square_param.mutable_power_param()->set_power(float(2));
+
     square_layer_.reset(new PowerLayer<Dtype>(square_param));
     square_layer_->SetUp(square_bottom_vec_, square_top_vec_);
     // Set up pool_layer_ to sum over square neighborhoods of the input.
@@ -47,9 +50,14 @@ void LRNLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
     power_top_vec_.clear();
     power_top_vec_.push_back(&power_output_);
     LayerParameter power_param;
-    power_param.mutable_power_param()->set_power(-beta_);
-    power_param.mutable_power_param()->set_scale(alpha_);
-    power_param.mutable_power_param()->set_shift(Dtype(1));
+    //lewis_modify_sign
+    // power_param.mutable_power_param()->set_power(-beta_);
+    // power_param.mutable_power_param()->set_scale(alpha_);
+    // power_param.mutable_power_param()->set_shift(Dtype(1));
+    power_param.mutable_power_param()->set_power(float(-beta_));
+    power_param.mutable_power_param()->set_scale(float(alpha_));
+    power_param.mutable_power_param()->set_shift(float(1));
+
     power_layer_.reset(new PowerLayer<Dtype>(power_param));
     power_layer_->SetUp(pool_top_vec_, power_top_vec_);
     // Set up a product_layer_ to compute outputs by multiplying inputs by the
