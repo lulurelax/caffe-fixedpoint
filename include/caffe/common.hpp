@@ -15,7 +15,7 @@
 #include <string>
 #include <utility>  // pair
 #include <vector>
-typedef sg14::fixed_point<int32_t, -20> myfp;
+typedef sg14::fixed_point<int32_t, -22> myfp;
 //#include "caffe/util/device_alternate.hpp"
 #define NO_GPU LOG(FATAL) << "Cannot use GPU in CPU-only Caffe: check mode."
 // Convert macro to string

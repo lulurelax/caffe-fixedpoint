@@ -7,6 +7,7 @@
 #include "caffe/util/math_functions.hpp"
 #include "caffe/util/rng.hpp"
 //typedef sg14::fixed_point<int32_t,
+int log_sign=0;
 namespace caffe {
 
 template<>
@@ -17,9 +18,26 @@ void caffe_cpu_gemm<float>(const CBLAS_TRANSPOSE TransA,
   int lda = (TransA == CblasNoTrans) ? K : M;
   int ldb = (TransB == CblasNoTrans) ? N : K;
   //LOG(INFO)<<"time flies.";
-  std::cout<<"row: "<<M<<" col: "<<N<<" vec: "<<K<<std::endl;
+  //std::cout<<"row: "<<M<<" col: "<<N<<" vec: "<<K<<std::endl;
+  std::cout<<"in: "<<std::endl;
+  std::cout<<M<<"and"<<K<<"and"<<N<<"and"<<alpha<<"and"<<beta<<std::endl;
+//   if(log_sign<1){
+//
+  for(int i=0;i<10;i++){
+    if(i%100==0) std::cout<<std::endl;
+    std::cout<<A[i]<<" ";
+  }
+  for(int i=0;i<10;i++){
+    if(i%100==0) std::cout<<std::endl;
+    std::cout<<B[i]<<" ";
+  }
+//   log_sign++;
+// }
   cblas_sgemm(CblasRowMajor, TransA, TransB, M, N, K, alpha, A, lda, B,
       ldb, beta, C, N);
+  std::cout<<"out: "<<std::endl;
+   for(int i=0;i<10;i++)
+     std::cout<<C[i]<<" ";
 }
 
 template<>
@@ -47,9 +65,14 @@ void caffe_cpu_gemm<myfp>(const CBLAS_TRANSPOSE TransA,
       for(int i=0;i<N*K;i++){
         fb[i]=float(B[i]);
       }
+      for(int i=0;i<N*M;i++){
+        fc[i]=float(C[i]);
+      }
       float fbeta, falpha;
       fbeta=float(beta);falpha=float(alpha);
+
       caffe::caffe_cpu_gemm<float>(TransA, TransB, M, N, K, falpha, fa, fb, fbeta, fc);
+
       for(int i=0;i<M*N;i++){
         C[i]=fc[i];
       }
@@ -102,6 +125,9 @@ void caffe_cpu_gemv<myfp>(const CBLAS_TRANSPOSE TransA, const int M,
       }
       for(int i=0;i<xlen;i++){
         fx[i]=float(x[i]);
+      }
+      for(int i=0;i<ylen;i++){
+        fy[i]=float(y[i]);
       }
       caffe_cpu_gemv<float>(TransA, M, N, falpha, fa, fx, fbeta, fy);
       for(int i=0;i<ylen;i++){

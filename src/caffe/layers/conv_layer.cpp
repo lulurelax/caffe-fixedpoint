@@ -1,5 +1,5 @@
 #include <vector>
-
+#include <iostream>
 #include "caffe/layers/conv_layer.hpp"
 
 namespace caffe {
@@ -28,14 +28,29 @@ void ConvolutionLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
   for (int i = 0; i < bottom.size(); ++i) {
     const Dtype* bottom_data = bottom[i]->cpu_data();
     Dtype* top_data = top[i]->mutable_cpu_data();
+    //std::cout<<"num_:"<<this->num_<<std::endl;
+    //std::cout<<"bottom_dim_:"<<this->bottom_dim_<<std::endl;
+    //std::cout<<"top_dim_:"<<this->top_dim_<<std::endl;
     for (int n = 0; n < this->num_; ++n) {
       this->forward_cpu_gemm(bottom_data + n * this->bottom_dim_, weight,
           top_data + n * this->top_dim_);
       if (this->bias_term_) {
         const Dtype* bias = this->blobs_[1]->cpu_data();
+      for (int j = 0; j < 10; ++j)
+        std::cout<<"bias:"<<bias[j]<<std::endl;
         this->forward_cpu_bias(top_data + n * this->top_dim_, bias);
       }
     }
+     for (int n = 0; n < 1; ++n) {
+      std::cout<<"bottom:"<<std::endl;
+      for(int j =0; j < 10; j++)
+        std::cout<<*(bottom_data+n*this->bottom_dim_+j)<<" ";
+      std::cout<<"top:"<<std::endl;
+      for(int j =0; j < 10; j++)
+        std::cout<<top_data[n*this->top_dim_+j]<<" ";
+
+    }
+
   }
 }
 /*

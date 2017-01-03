@@ -45,7 +45,7 @@ $(BUILD_DIR)/%.o: %.cpp
 	@ mkdir -p build/src/caffe/util
 	@ mkdir -p build/src/caffe/solvers
 	@ echo CXX $<
-	@ $(CXX) $< -c -g -o $@ $(INCLUDEFLAGS) $(COMMON_FLAGS) -DUSE_FIX
+	@ $(CXX) $< -c -g -o $@ $(INCLUDEFLAGS) $(COMMON_FLAGS) 
 
 clean:
 	@ rm -rf build

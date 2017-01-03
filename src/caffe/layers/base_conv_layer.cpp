@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <vector>
+#include <iostream>
 
 #include "caffe/filler.hpp"
 #include "caffe/layers/base_conv_layer.hpp"
@@ -264,6 +265,11 @@ void BaseConvolutionLayer<Dtype>::forward_cpu_gemm(const Dtype* input,
     }
     col_buff = col_buffer_.cpu_data();
   }
+  std::cout<<"group_: "<<group_<<std::endl;
+  std::cout<<"weight_offset_: "<<weight_offset_<<std::endl;
+  std::cout<<"output_offset_: "<<output_offset_<<std::endl;
+  std::cout<<"col_offset_: "<<col_offset_<<std::endl;
+
   for (int g = 0; g < group_; ++g) {
     caffe_cpu_gemm<Dtype>(CblasNoTrans, CblasNoTrans, conv_out_channels_ /
         group_, conv_out_spatial_dim_, kernel_dim_,
@@ -278,6 +284,7 @@ void BaseConvolutionLayer<Dtype>::forward_cpu_bias(Dtype* output,
   caffe_cpu_gemm<Dtype>(CblasNoTrans, CblasNoTrans, num_output_,
       out_spatial_dim_, 1, (Dtype)1., bias, bias_multiplier_.cpu_data(),
       (Dtype)1., output);
+      std::cout<<"multiplier: "<<*(bias_multiplier_.cpu_data())<<std::endl;
 }
 /*
 template <typename Dtype>

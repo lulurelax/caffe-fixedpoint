@@ -3,4 +3,6 @@
 *.swp
 *.o
 *.d
+*.anjuta
+*.db
 /.anjuta/
