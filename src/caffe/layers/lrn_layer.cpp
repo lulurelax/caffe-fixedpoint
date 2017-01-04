@@ -110,6 +110,14 @@ void LRNLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
   default:
     LOG(FATAL) << "Unknown normalization region.";
   }
+  const Dtype* top_data=top[0]->cpu_data();
+  const Dtype* bottom_data=bottom[0]->cpu_data();
+  std::cout<<"lrn top:"<<std::endl;
+  for(int i=0;i<100;i++)
+  std::cout<<top_data[i]<<" ";
+  std::cout<<"lrn bottom:"<<std::endl;
+  for(int i=0;i<100;i++)
+  std::cout<<bottom_data[i]<<" ";
 }
 
 template <typename Dtype>
@@ -125,19 +133,31 @@ void LRNLayer<Dtype>::CrossChannelForward_cpu(
   Blob<Dtype> padded_square(1, channels_ + size_ - 1, height_, width_);
   Dtype* padded_square_data = padded_square.mutable_cpu_data();
   caffe_set(padded_square.count(), Dtype(0), padded_square_data);
-  Dtype alpha_over_size = alpha_ / size_;
+  Dtype alpha_over_size = alpha_ *( 1.0/size_);
   // go through the images
   for (int n = 0; n < num_; ++n) {
     // compute the padded square
     caffe_sqr(channels_ * height_ * width_,
         bottom_data + bottom[0]->offset(n),
         padded_square_data + padded_square.offset(0, pre_pad_));
+    std::cout<<"sqr bottom:"<<std::endl;
+    for(int i=0;i<10;i++)
+    std::cout<<bottom_data[i]<<" ";
+    std::cout<<"sqr padded:"<<std::endl;
+    for(int i=0;i<10;i++)
+    std::cout<<padded_square_data[i]<<" ";
     // Create the first channel scale
     for (int c = 0; c < size_; ++c) {
       caffe_axpy<Dtype>(height_ * width_, alpha_over_size,
           padded_square_data + padded_square.offset(0, c),
           scale_data + scale_.offset(n, 0));
     }
+    std::cout<<"for1 padded:"<<std::endl;
+    for(int i=0;i<10;i++)
+    std::cout<<padded_square_data[i]<<" ";
+    std::cout<<"for1 scale:"<<std::endl;
+    for(int i=0;i<10;i++)
+    std::cout<<scale_data[i]<<" ";
     for (int c = 1; c < channels_; ++c) {
       // copy previous scale
       caffe_copy<Dtype>(height_ * width_,
@@ -152,11 +172,30 @@ void LRNLayer<Dtype>::CrossChannelForward_cpu(
           padded_square_data + padded_square.offset(0, c - 1),
           scale_data + scale_.offset(n, c));
     }
+    std::cout<<"for2 padded:"<<std::endl;
+    for(int i=0;i<10;i++)
+    std::cout<<padded_square_data[i]<<" ";
+    std::cout<<"for2 scale:"<<std::endl;
+    for(int i=0;i<10;i++)
+    std::cout<<scale_data[i]<<" ";
   }
 
   // In the end, compute output
+
   caffe_powx<Dtype>(scale_.count(), scale_data, -beta_, top_data);
+  // std::cout<<"powx top:"<<std::endl;
+  // for(int i=0;i<100;i++)
+  // std::cout<<top_data[i]<<" ";
+  // std::cout<<"powx scale:"<<std::endl;
+  // for(int i=0;i<100;i++)
+  // std::cout<<scale_data[i]<<" ";
   caffe_mul<Dtype>(scale_.count(), top_data, bottom_data, top_data);
+  // std::cout<<"mul top:"<<std::endl;
+  // for(int i=0;i<100;i++)
+  // std::cout<<top_data[i]<<" ";
+  // std::cout<<"mul bottom:"<<std::endl;
+  // for(int i=0;i<100;i++)
+  // std::cout<<bottom_data[i]<<" ";
 }
 
 template <typename Dtype>

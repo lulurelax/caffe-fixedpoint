@@ -115,29 +115,31 @@ namespace sg14 {
     constexpr fixed_point<LhsRep, LhsExponent> operator*(
             const fixed_point<LhsRep, LhsExponent>& lhs,
             const fixed_point<RhsRep, RhsExponent>& rhs){
-  //  -> decltype(_impl::fp::operate<_impl::fp::arithmetic_operator_tag, _impl::multiply_tag>(
-  //          lhs, rhs))
-  //  {
-        //return _impl::fp::operate<_impl::fp::arithmetic_operator_tag, _impl::multiply_tag>(
-        //        lhs, rhs);
-        return fixed_point<LhsRep, LhsExponent>(multiply(lhs,rhs));
-    }
+              return fixed_point<LhsRep, LhsExponent>(_impl::fp::operate<_impl::fp::arithmetic_operator_tag, _impl::multiply_tag>(
+                           lhs, rhs));
+            }
+    // -> decltype(_impl::fp::operate<_impl::fp::arithmetic_operator_tag, _impl::multiply_tag>(
+    //         lhs, rhs))
+    // {
+    //     return _impl::fp::operate<_impl::fp::arithmetic_operator_tag, _impl::multiply_tag>(
+    //             lhs, rhs);
+    // }
 
     // divide
     template<class LhsRep, int LhsExponent, class RhsRep, int RhsExponent>
     constexpr fixed_point<LhsRep, LhsExponent> operator/(
             const fixed_point<LhsRep, LhsExponent>& lhs,
-            const fixed_point<RhsRep, RhsExponent>& rhs){
+            const fixed_point<RhsRep, RhsExponent>& rhs)
+            {
               return fixed_point<LhsRep, LhsExponent>(_impl::fp::operate<_impl::fp::division_arithmetic_operator_tag, _impl::divide_tag>(
-                      lhs, rhs));
+                           lhs, rhs));
             }
-            /*
-    -> decltype(_impl::fp::operate<_impl::fp::division_arithmetic_operator_tag, _impl::divide_tag>(
-            lhs, rhs))
-    {
-        return _impl::fp::operate<_impl::fp::division_arithmetic_operator_tag, _impl::divide_tag>(
-                lhs, rhs);
-    }*/
+    // -> decltype(_impl::fp::operate<_impl::fp::division_arithmetic_operator_tag, _impl::divide_tag>(
+    //         lhs, rhs))
+    // {
+    //     return _impl::fp::operate<_impl::fp::division_arithmetic_operator_tag, _impl::divide_tag>(
+    //             lhs, rhs);
+    // }
 
     ////////////////////////////////////////////////////////////////////////////////
     // heterogeneous operator overloads

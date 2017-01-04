@@ -21,18 +21,17 @@ void caffe_cpu_gemm<float>(const CBLAS_TRANSPOSE TransA,
   //std::cout<<"row: "<<M<<" col: "<<N<<" vec: "<<K<<std::endl;
   std::cout<<"in: "<<std::endl;
   std::cout<<M<<"and"<<K<<"and"<<N<<"and"<<alpha<<"and"<<beta<<std::endl;
-//   if(log_sign<1){
+//    if(log_sign==2){
 //
-  for(int i=0;i<10;i++){
-    if(i%100==0) std::cout<<std::endl;
-    std::cout<<A[i]<<" ";
-  }
-  for(int i=0;i<10;i++){
-    if(i%100==0) std::cout<<std::endl;
-    std::cout<<B[i]<<" ";
-  }
-//   log_sign++;
-// }
+//   for(int i=0;i<M*K;i++){
+//     if(i%100==0) std::cout<<std::endl;
+//     std::cout<<A[i]<<" ";
+//   }
+//   for(int i=0;i<N*K;i++){
+//     if(i%100==0) std::cout<<std::endl;
+//     std::cout<<B[i]<<" ";
+//   }
+// }log_sign++;
   cblas_sgemm(CblasRowMajor, TransA, TransB, M, N, K, alpha, A, lda, B,
       ldb, beta, C, N);
   std::cout<<"out: "<<std::endl;
@@ -141,7 +140,19 @@ void caffe_cpu_gemv<myfp>(const CBLAS_TRANSPOSE TransA, const int M,
 
 template <>
 void caffe_axpy<float>(const int N, const float alpha, const float* X,
-    float* Y) { cblas_saxpy(N, alpha, X, 1, Y, 1); }
+    float* Y) {
+      std::cout<<"axpy alpha:"<<alpha<<std::endl;
+      std::cout<<"axpy x:"<<std::endl;
+      for(int i=0;i<10;i++)
+      std::cout<<X[i]<<" ";
+      std::cout<<"axpy y:"<<std::endl;
+      for(int i=0;i<10;i++)
+      std::cout<<Y[i]<<" ";
+      cblas_saxpy(N, alpha, X, 1, Y, 1);
+      std::cout<<"axpy y:"<<std::endl;
+      for(int i=0;i<10;i++)
+      std::cout<<Y[i]<<" ";
+    }
 
 template <>
 void caffe_axpy<double>(const int N, const double alpha, const double* X,
@@ -160,7 +171,7 @@ void caffe_axpy<myfp>(const int N, const myfp alpha, const myfp* X,
       for(int i=0;i<N;i++){
         fy[i]=float(Y[i]);
       }
-      cblas_saxpy(N, falpha, fx, 1, fy, 1);
+      caffe_axpy<float>(N, falpha, fx,fy);
       for(int i=0;i<N;i++){
         Y[i]=fy[i];
       }
@@ -448,7 +459,17 @@ void caffe_powx<myfp>(const int n, const myfp* a, const myfp b,
 
 template <>
 void caffe_sqr<float>(const int n, const float* a, float* y) {
+  //std::cout<<"axpy alpha:"<<alpha<<std::endl;
+  std::cout<<"sqr a:"<<std::endl;
+  for(int i=0;i<10;i++)
+  std::cout<<a[i]<<" ";
+  std::cout<<"sqr y:"<<std::endl;
+  for(int i=0;i<10;i++)
+  std::cout<<y[i]<<" ";
   vsSqr(n, a, y);
+  std::cout<<"sqr y:"<<std::endl;
+  for(int i=0;i<10;i++)
+  std::cout<<y[i]<<" ";
 }
 
 template <>
@@ -462,9 +483,10 @@ void caffe_sqr<myfp>(const int n, const myfp* a, myfp* y) {
   float* fy=(float*)malloc(n*sizeof(float));
   for(int i=0;i<n;i++){
     fa[i]=float(a[i]);
+    fy[i]=float(y[i]);
     // fb[i]=b[i];
   }
-vsSqr(n, fa, fy);
+caffe_sqr<float>(n, fa, fy);
 for(int i=0;i<n;i++){
 y[i]=fy[i];
 // fb[i]=b[i];

@@ -146,7 +146,7 @@ void PoolingLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
       mask = max_idx_.mutable_cpu_data();
       caffe_set(top_count, -1, mask);
     }
-    caffe_set(top_count, Dtype(-FLT_MAX), top_data);
+    caffe_set(top_count, Dtype(-512.0), top_data);
     // The main loop
     for (int n = 0; n < bottom[0]->num(); ++n) {
       for (int c = 0; c < channels_; ++c) {
@@ -165,7 +165,9 @@ void PoolingLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
                 if (bottom_data[index] > top_data[pool_index]) {
                   top_data[pool_index] = bottom_data[index];
                   if (use_top_mask) {
-                    top_mask[pool_index] = static_cast<Dtype>(index);
+                    //lewis_modify_sign
+                    //top_mask[pool_index] = static_cast<Dtype>(index);
+                    top_mask[pool_index] = Dtype(index);
                   } else {
                     mask[pool_index] = index;
                   }
@@ -224,6 +226,12 @@ void PoolingLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
   default:
     LOG(FATAL) << "Unknown pooling method.";
   }
+  std::cout<<"pooling top:"<<std::endl;
+  for(int i=0;i<100;i++)
+  std::cout<<top_data[i]<<" ";
+  std::cout<<"pooling bottom:"<<std::endl;
+  for(int i=0;i<100;i++)
+  std::cout<<bottom_data[i]<<" ";
 }
 /*
 template <typename Dtype>

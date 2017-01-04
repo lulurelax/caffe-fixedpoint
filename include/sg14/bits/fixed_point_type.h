@@ -90,8 +90,7 @@ namespace sg14 {
 
         ////////////////////////////////////////////////////////////////////////////////
         // functions
-      //  template<class rep,int Exp>
-        //constexpr fixed_point<rep, Exp>& operator=(const double& x){return fixed_point<rep, Exp>(x);}
+
     private:
         // constructor taking representation explicitly using operator++(int)-style trick
         constexpr fixed_point(rep r, int)
@@ -103,13 +102,9 @@ namespace sg14 {
         /// default constructor
         fixed_point() { }
 
-        //template<class FromRep, int FromExponent>
-
-        fixed_point(const double& x):_r(floating_point_to_rep(x)){
-
+        fixed_point(const float& x){
+          _r=floating_point_to_rep(x);
         }
-        // operator float(){return rep_to_floating_point<float>(_r);}
-        // operator double(){return double(rep_to_floating_point<float>(_r));}
         /// constructor taking a fixed-point type explicitly
         template<class FromRep, int FromExponent, typename std::enable_if<!_impl::fp::is_implicitly_convertible<fixed_point<FromRep, FromExponent>, fixed_point>::value, int>::type Dummy = 0>
         explicit constexpr fixed_point(const fixed_point<FromRep, FromExponent>& rhs)
@@ -384,13 +379,7 @@ namespace sg14 {
         static_assert(std::is_floating_point<S>::value, "S must be floating-point type");
         return S(r)*inverse_one<S>();
     }
-    // template<class Rep, int Exponent>
-    // template<>
-    // constexpr double fixed_point<Rep, Exponent>::rep_to_floating_point(rep r)
-    // {
-    //     static_assert(std::is_floating_point<double>::value, "S must be floating-point type");
-    //     return double(r)*inverse_one<double>();
-    // }
+
     template<class Rep, int Exponent>
     template<class FromRep, int FromExponent>
     constexpr typename fixed_point<Rep, Exponent>::rep fixed_point<Rep, Exponent>::fixed_point_to_rep(const fixed_point<FromRep, FromExponent>& rhs)

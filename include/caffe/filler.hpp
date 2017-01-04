@@ -80,7 +80,7 @@ class GaussianFiller : public Filler<Dtype> {
       // of non-zero input weights for a given output.
       CHECK_GE(blob->num_axes(), 1);
       const int num_outputs = blob->shape(0);
-      Dtype non_zero_probability = Dtype(sparse) / Dtype(num_outputs);
+      Dtype non_zero_probability = Dtype(sparse)* (1.0/ num_outputs);
       rand_vec_.reset(new SyncedMemory(blob->count() * sizeof(int)));
       int* mask = reinterpret_cast<int*>(rand_vec_->mutable_cpu_data());
       caffe_rng_bernoulli(blob->count(), non_zero_probability, mask);
@@ -152,12 +152,14 @@ class XavierFiller : public Filler<Dtype> {
     Dtype n = fan_in;  // default to fan_in
     if (this->filler_param_.variance_norm() ==
         FillerParameter_VarianceNorm_AVERAGE) {
-      n = Dtype(fan_in + fan_out) / Dtype(2);
+      n = Dtype(fan_in + fan_out) * 0.5;
     } else if (this->filler_param_.variance_norm() ==
         FillerParameter_VarianceNorm_FAN_OUT) {
       n = fan_out;
     }
-    Dtype scale = sqrt(Dtype(3) / n);
+    //lewis_modify_sign
+    //Dtype scale = sqrt(Dtype(3) / n);
+    Dtype scale = sqrt(3.0/float(n));
     caffe_rng_uniform<Dtype>(blob->count(), -scale, scale,
         blob->mutable_cpu_data());
     CHECK_EQ(this->filler_param_.sparse(), -1)
@@ -194,12 +196,14 @@ class MSRAFiller : public Filler<Dtype> {
     Dtype n = fan_in;  // default to fan_in
     if (this->filler_param_.variance_norm() ==
         FillerParameter_VarianceNorm_AVERAGE) {
-      n = Dtype(fan_in + fan_out) / Dtype(2);
+      n = Dtype(fan_in + fan_out)*0.5;
     } else if (this->filler_param_.variance_norm() ==
         FillerParameter_VarianceNorm_FAN_OUT) {
       n = fan_out;
     }
-    Dtype std = sqrt(Dtype(2) / n);
+    //lewis_modify_sign
+    //Dtype std = sqrt(Dtype(2) / n);
+    Dtype std = sqrt(2.0 / float(n));
     caffe_rng_gaussian<Dtype>(blob->count(), Dtype(0), std,
         blob->mutable_cpu_data());
     CHECK_EQ(this->filler_param_.sparse(), -1)

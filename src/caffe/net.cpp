@@ -552,7 +552,7 @@ Dtype Net<Dtype>::ForwardFromTo(int start, int end) {
     //std::cout<<bottom_vecs_[i][0]->cpu_data()[2]<<std::endl;
     Dtype layer_loss = layers_[i]->Forward(bottom_vecs_[i], top_vecs_[i]);
     loss += layer_loss;
-    if (debug_info_) { ForwardDebugInfo(i); }
+    //if (debug_info_) { ForwardDebugInfo(i); }
   }
   return loss;
 }
@@ -602,31 +602,31 @@ void Net<Dtype>::BackwardFromTo(int start, int end) {
   }
 }*/
 
-template <typename Dtype>
-void Net<Dtype>::ForwardDebugInfo(const int layer_id) {
-  for (int top_id = 0; top_id < top_vecs_[layer_id].size(); ++top_id) {
-    const Blob<Dtype>& blob = *top_vecs_[layer_id][top_id];
-    const string& blob_name = blob_names_[top_id_vecs_[layer_id][top_id]];
-    const Dtype data_abs_val_mean = blob.asum_data() / blob.count();
-    LOG_IF(INFO, Caffe::root_solver())
-        << "    [Forward] "
-        << "Layer " << layer_names_[layer_id]
-        << ", top blob " << blob_name
-        << " data: " << data_abs_val_mean;
-  }
-  for (int param_id = 0; param_id < layers_[layer_id]->blobs().size();
-       ++param_id) {
-    const Blob<Dtype>& blob = *layers_[layer_id]->blobs()[param_id];
-    const int net_param_id = param_id_vecs_[layer_id][param_id];
-    const string& blob_name = param_display_names_[net_param_id];
-    const Dtype data_abs_val_mean = blob.asum_data() / blob.count();
-    LOG_IF(INFO, Caffe::root_solver())
-        << "    [Forward] "
-        << "Layer " << layer_names_[layer_id]
-        << ", param blob " << blob_name
-        << " data: " << data_abs_val_mean;
-  }
-}
+// template <typename Dtype>
+// void Net<Dtype>::ForwardDebugInfo(const int layer_id) {
+//   for (int top_id = 0; top_id < top_vecs_[layer_id].size(); ++top_id) {
+//     const Blob<Dtype>& blob = *top_vecs_[layer_id][top_id];
+//     const string& blob_name = blob_names_[top_id_vecs_[layer_id][top_id]];
+//     const Dtype data_abs_val_mean = blob.asum_data()* Dtype(1.0/blob.count());
+//     LOG_IF(INFO, Caffe::root_solver())
+//         << "    [Forward] "
+//         << "Layer " << layer_names_[layer_id]
+//         << ", top blob " << blob_name
+//         << " data: " << data_abs_val_mean;
+//   }
+//   for (int param_id = 0; param_id < layers_[layer_id]->blobs().size();
+//        ++param_id) {
+//     const Blob<Dtype>& blob = *layers_[layer_id]->blobs()[param_id];
+//     const int net_param_id = param_id_vecs_[layer_id][param_id];
+//     const string& blob_name = param_display_names_[net_param_id];
+//     const Dtype data_abs_val_mean = blob.asum_data() / blob.count();
+//     LOG_IF(INFO, Caffe::root_solver())
+//         << "    [Forward] "
+//         << "Layer " << layer_names_[layer_id]
+//         << ", param blob " << blob_name
+//         << " data: " << data_abs_val_mean;
+//   }
+// }
 /*
 template <typename Dtype>
 void Net<Dtype>::BackwardDebugInfo(const int layer_id) {

@@ -273,8 +273,10 @@ int main(int argc, char** argv) {
 #include <string>
 #include <utility>
 #include <vector>
-
-typedef sg14::fixed_point<int32_t,-22> myfp;
+// #include "sg14/fixedpoint64.hpp"
+typedef sg14::fixed_point<int64_t, -25> myfp;
+// typedef Fp::Fp64f<25> myfp;
+// typedef sg14::fixed_point<int32_t,-23> myfp;
 using namespace caffe;  // NOLINT(build/namespaces)
 using std::string;
 
@@ -493,11 +495,13 @@ void Classifier::Preprocess(const cv::Mat& img,
 
 int main(int argc, char** argv) {
 
+  myfp d=-512.0;
+  myfp c=600;
   myfp a=234.12387979;
   myfp b=123.12312;
   std::cout<<float(a)<<std::endl;
   std::cout<<a*b<<" "<<float(a)*float(b)<<std::endl;
-  std::cout<<(myfp)1.<<std::endl;
+  std::cout<<d<<"and"<<c<<std::endl;
 
   if (argc != 6) {
     std::cerr << "Usage: " << argv[0]
