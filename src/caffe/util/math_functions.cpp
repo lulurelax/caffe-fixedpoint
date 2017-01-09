@@ -8,6 +8,7 @@
 #include "caffe/util/rng.hpp"
 //typedef sg14::fixed_point<int32_t,
 int log_sign=0;
+float max=100;
 namespace caffe {
 
 template<>
@@ -460,13 +461,18 @@ void caffe_powx<myfp>(const int n, const myfp* a, const myfp b,
 template <>
 void caffe_sqr<float>(const int n, const float* a, float* y) {
   //std::cout<<"axpy alpha:"<<alpha<<std::endl;
+  for(int i=0;i<n;i++)
+    if(a[i]>max) max=a[i];
+  std::cout<<"max y:"<<max<<std::endl;
   std::cout<<"sqr a:"<<std::endl;
   for(int i=0;i<10;i++)
   std::cout<<a[i]<<" ";
+  std::cout<<std::endl;
   std::cout<<"sqr y:"<<std::endl;
   for(int i=0;i<10;i++)
   std::cout<<y[i]<<" ";
   vsSqr(n, a, y);
+  std::cout<<std::endl;
   std::cout<<"sqr y:"<<std::endl;
   for(int i=0;i<10;i++)
   std::cout<<y[i]<<" ";

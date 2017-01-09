@@ -1,7 +1,8 @@
 #include <vector>
 #include <iostream>
 #include "caffe/layers/conv_layer.hpp"
-
+float max_conv=100;
+float max_in=100;
 namespace caffe {
 
 template <typename Dtype>
@@ -48,6 +49,14 @@ void ConvolutionLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
       std::cout<<"top:"<<std::endl;
       for(int j =0; j < 10; j++)
         std::cout<<top_data[n*this->top_dim_+j]<<" ";
+      for(int j=0;j<this->num_*this->top_dim_;j++)
+        if(top_data[j]>max_conv) max_conv=float(top_data[j]);
+      for(int j=0;j<this->num_*this->bottom_dim_;j++)
+          if(bottom_data[j]>max_in) max_in=float(bottom_data[j]);
+      std::cout<<std::endl;
+      std::cout<<"conv max:"<<max_conv<<std::endl;
+      std::cout<<std::endl;
+      std::cout<<"conv in:"<<max_in<<std::endl;
 
     }
 
