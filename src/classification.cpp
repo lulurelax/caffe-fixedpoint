@@ -274,7 +274,7 @@ int main(int argc, char** argv) {
 #include <utility>
 #include <vector>
 // #include "sg14/fixedpoint64.hpp"
-typedef sg14::fixed_point<int32_t, -20> myfp;
+typedef sg14::fixed_point<int32_t, -17> myfp;
 // typedef Fp::Fp64f<25> myfp;
 // typedef sg14::fixed_point<int32_t,-23> myfp;
 using namespace caffe;  // NOLINT(build/namespaces)

@@ -1,8 +1,9 @@
 #include <vector>
 #include <iostream>
 #include "caffe/layers/conv_layer.hpp"
-float max_conv=100;
-float max_in=100;
+float max_conv=0;
+float max_in=0;
+int count_conv=0;
 namespace caffe {
 
 template <typename Dtype>
@@ -26,8 +27,21 @@ template <typename Dtype>
 void ConvolutionLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top) {
   const Dtype* weight = this->blobs_[0]->cpu_data();
+  if(count_conv<2){
+       for (int i = 0; i < bottom.size(); ++i){
+         Dtype* bottom_data_mutable = bottom[i]->mutable_cpu_data();
+         for(int j=0;j<this->num_*this->bottom_dim_;j++)
+           bottom_data_mutable[j]=bottom_data_mutable[j]*0.01;
+       }
+       Dtype* bias_mutable = this->blobs_[1]->mutable_cpu_data();
+      for(int i=0;i<this->blobs_[1]->shape(0);i++){
+        bias_mutable[i]=bias_mutable[i]*0.01;
+      }
+      count_conv++;
+  }
   for (int i = 0; i < bottom.size(); ++i) {
     const Dtype* bottom_data = bottom[i]->cpu_data();
+    //Dtype* bottom_data_mutable=
     Dtype* top_data = top[i]->mutable_cpu_data();
     //std::cout<<"num_:"<<this->num_<<std::endl;
     //std::cout<<"bottom_dim_:"<<this->bottom_dim_<<std::endl;

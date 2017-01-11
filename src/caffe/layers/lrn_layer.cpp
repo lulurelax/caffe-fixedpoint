@@ -124,8 +124,8 @@ template <typename Dtype>
 void LRNLayer<Dtype>::CrossChannelForward_cpu(
     const vector<Blob<Dtype>*>& bottom, const vector<Blob<Dtype>*>& top) {
   Dtype* bottom_data = bottom[0]->mutable_cpu_data();
-  for(int n=0;n<bottom[0]->shape(0)*bottom[0]->shape(1)*bottom[0]->shape(2)*bottom[0]->shape(3);n++)
-    bottom_data[n]=bottom_data[n]*0.01;
+  // for(int n=0;n<bottom[0]->shape(0)*bottom[0]->shape(1)*bottom[0]->shape(2)*bottom[0]->shape(3);n++)
+  //   bottom_data[n]=bottom_data[n]*0.01;
 
   Dtype* top_data = top[0]->mutable_cpu_data();
   Dtype* scale_data = scale_.mutable_cpu_data();
@@ -136,7 +136,8 @@ void LRNLayer<Dtype>::CrossChannelForward_cpu(
   Blob<Dtype> padded_square(1, channels_ + size_ - 1, height_, width_);
   Dtype* padded_square_data = padded_square.mutable_cpu_data();
   caffe_set(padded_square.count(), Dtype(0), padded_square_data);
-  Dtype alpha_over_size = alpha_ *( 1000.0/size_)*pow(10,-2/float(beta_));
+  //Dtype alpha_over_size = 0.2*pow(10,-2/float(beta_));
+   Dtype alpha_over_size = alpha_ *( 10000.0/size_)*pow(10,-2/float(beta_));
   // go through the images
   for (int n = 0; n < num_; ++n) {
     // compute the padded square
