@@ -16,3 +16,6 @@ Using `sg14::fixed_point<int64_t, -25>`, and solve some data width problems(by m
 0.0715 - "n02127052 lynx, catamount"   
 
 which is same with the float version of Caffe.
+
+## Step 4
+I found that the intermediate large numbers came from LRN layer, therefore I changed its computation, and make its intermediate result smaller. Now I can use 16 bit fixed point for inference, and get a correct result.
